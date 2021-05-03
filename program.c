@@ -44,30 +44,31 @@ void Menu() {
 
          switch (escolha)
          {
-             case 1:
+            case 1:
                 break;
-             case 2:
-                Menu_Produtos();
+            case 2:
+                Menu_Stock();
                 break;
-             case 9:
-                printf("Ate Amanha!\n");
+            case 9:
+                
                 break;
-             default:
+            default:
                 Invalid();
+                Sleep(1000);
                 break;
          }
 
         } while (escolha != 9);
 }
 
-void Menu_Produtos() {
+void Menu_Stock() {
     do
         {
          system("cls");
          Lines();
-         printf(YELLOW "\n%s" RESET " - " GREEN "Produtos\n\n" RESET, NomePrograma);
-         printf("1. Visualizar\n");
-         printf("2. Inserir\n");
+         printf(YELLOW "\n%s" RESET " - " GREEN "Stock\n\n" RESET, NomePrograma);
+         printf("1. Inserir\n");
+         printf("2. Listar\n");
          printf("3. Editar\n");
          printf("4. Eliminar\n");
 
@@ -80,19 +81,49 @@ void Menu_Produtos() {
          switch (escolha)
          {
              case 1:
-                 printf("Ola");
-                  break;
+                Stock_Inserir();
+                break;
              case 2:
-                 printf("Ola");
-                  break;
-             case 9:
-                 Menu();
-                 break;
-             default:
-                 Invalid();
                  
+                break;
+             case 9:
+                Menu();
+                break;
+             default:
+                Invalid();
+                Sleep(1000);
                 break;
          }
 
         } while (escolha != 9);
+}
+
+
+// STOCK
+
+void Check_Stock() {
+    FILE *ficheiro;
+    
+    char nome_ficheiro[100];
+    char nome[100] = "Produto";
+
+    for (float i = 0; i < 5; i++)
+    {
+        sprintf(nome_ficheiro, "%s%03.0f.txt", nome, i+1);
+        printf("\n%s", nome_ficheiro);
+      
+        ficheiro = fopen(nome_ficheiro, "w");
+
+        fprintf(ficheiro, "Ta da!!");  
+        fclose(ficheiro);
+    }
+}
+
+
+void Stock_Inserir() {
+   system("cls"); 
+   Check_Stock();
+
+   printf("\nPressiona ENTER para continuar\n");
+    getch();   
 }
