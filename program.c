@@ -11,7 +11,7 @@
 #define CYAN    "\x1b[36m"
 #define RESET   "\x1b[0m"
 
-//Vari�veis
+//Variaveis
 char NomePrograma[50] = "Coutaro";
 char escolha_char[3];
 int escolha = 0;
