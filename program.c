@@ -25,6 +25,7 @@ void main() {
     Menu();
 }
 
+// MENUS
 void Menu() {
     do
         {
@@ -49,10 +50,50 @@ void Menu() {
             case 2:
                 Menu_Stock();
                 break;
+            case 3:
+                Menu_Clientes();
+                break;
             case 9:
                 
                 break;
             default:
+                Invalid();
+                Sleep(1000);
+                break;
+         }
+
+        } while (escolha != 9);
+}
+
+void Menu_Clientes() {
+    do
+        {
+         system("cls");
+         Lines();
+         printf(YELLOW "\n%s" RESET " - " GREEN "Clientes\n\n" RESET, NomePrograma);
+         printf("1. Inserir\n");
+         printf("2. Listar\n");
+         printf("3. Editar\n");
+         printf("4. Eliminar\n");
+
+         printf(RED "\n9. Voltar\n" RESET);
+         Lines();
+         printf(GREEN "\nEscolha: " RESET);
+         scanf("%s",escolha_char);
+         escolha = atoi(escolha_char);
+
+         switch (escolha)
+         {
+             case 1:
+                Inserir_Cliente();
+                break;
+             case 2:
+                
+                break;
+             case 9:
+                Menu();
+                break;
+             default:
                 Invalid();
                 Sleep(1000);
                 break;
@@ -81,7 +122,7 @@ void Menu_Stock() {
          switch (escolha)
          {
              case 1:
-                Stock_Inserir();
+                //Stock_Inserir();
                 break;
              case 2:
                  
@@ -99,13 +140,13 @@ void Menu_Stock() {
 }
 
 
-// STOCK
+// CLIENTES
 
 void Check_Stock() {
     FILE *ficheiro;
     
     char nome_ficheiro[100];
-    char nome[100] = "Produto";
+    char nome[100] = "Cliente";
 
     for (float i = 0; i < 5; i++)
     {
@@ -114,13 +155,13 @@ void Check_Stock() {
       
         ficheiro = fopen(nome_ficheiro, "w");
 
-        fprintf(ficheiro, "Ta da!!");  
+        fprintf(ficheiro, "Roberto");  
         fclose(ficheiro);
     }
 }
 
 
-void Stock_Inserir() {
+void Inserir_Cliente() {
    system("cls"); 
    Check_Stock();
 
