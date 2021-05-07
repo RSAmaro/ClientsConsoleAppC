@@ -134,8 +134,8 @@ int Check_Clientes() {
 }
 
 void Inserir_Cliente() {
-   system("cls"); 
-    FILE *ficheiro;
+    system("cls");
+    FILE *FIL;
     char Client_Name[100];
     float num = Check_Clientes();
     
@@ -146,12 +146,12 @@ void Inserir_Cliente() {
     sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, num);
     printf("\nO cliente foi guardado como: %s", nome_ficheiro);
       
-    ficheiro = fopen(nome_ficheiro, "w");
+    FIL = fopen(nome_ficheiro, "w");
 
     //printf("Nome: %s\n", Client_Name);
-    fprintf(ficheiro, "Nome: %s\n", Client_Name);
+    fprintf(FIL, "Nome: %s\n", Client_Name);
 
-    fclose(ficheiro);
+    fclose(FIL);
 
    printf("\nPressiona ENTER para continuar\n");
    getch();   
