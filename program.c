@@ -139,6 +139,8 @@ void Menu_Stock() {
         } while (escolha != 9);
 }
 
+//Stock
+
 
 // CLIENTES
 
