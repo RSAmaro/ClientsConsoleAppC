@@ -140,7 +140,9 @@ void Menu_Stock() {
 }
 
 //Stock
+void Stock_Inserir(){
 
+}
 
 // CLIENTES
 
