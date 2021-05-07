@@ -17,7 +17,7 @@ char escolha_char[3];
 int escolha = 0;
 
 //Respostas
-void Invalid() {printf(RED "\nEscolha Invalida!\n" RESET);}
+void Invalid() {printf(RED "\nEscolha Invalida!\n" RESET); printf("\nPressiona ENTER para continuar\n"); getch(); }
 void Lines() { printf("====================");}
 
 //Program
@@ -26,6 +26,7 @@ void main() {
 }
 
 // MENUS
+#pragma region Menu
 void Menu() {
     do
         {
@@ -58,7 +59,7 @@ void Menu() {
                 break;
             default:
                 Invalid();
-                Sleep(1000);
+              
                 break;
          }
 
@@ -95,7 +96,6 @@ void Menu_Clientes() {
                 break;
              default:
                 Invalid();
-                Sleep(1000);
                 break;
          }
 
@@ -132,17 +132,17 @@ void Menu_Stock() {
                 break;
              default:
                 Invalid();
-                Sleep(1000);
+                
                 break;
          }
 
         } while (escolha != 9);
 }
-
+#pragma endregion
 
 // CLIENTES
-
-void Check_Stock() {
+#pragma region Clientes
+void Inserir_Clientes() {
     FILE *ficheiro;
     
     char nome_ficheiro[100];
@@ -163,8 +163,9 @@ void Check_Stock() {
 
 void Inserir_Cliente() {
    system("cls"); 
-   Check_Stock();
+   Inserir_Clientes();
 
    printf("\nPressiona ENTER para continuar\n");
-    getch();   
+   getch();   
 }
+#pragma endregion
