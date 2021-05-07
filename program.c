@@ -12,9 +12,14 @@
 #define RESET   "\x1b[0m"
 
 //Variaveis
+int MaxQuantidade = 99999999;
 char NomePrograma[50] = "Coutaro";
+char nome_ficheiro[100];
 char escolha_char[3];
-int escolha = 0;
+
+int escolha;
+
+char Cliente[100] = "Cliente";
 
 //Respostas
 void Invalid() {printf(RED "\nEscolha Invalida!\n" RESET); printf("\nPressiona ENTER para continuar\n"); getch(); }
@@ -46,21 +51,11 @@ void Menu() {
 
          switch (escolha)
          {
-            case 1:
-                break;
-            case 2:
-                Menu_Stock();
-                break;
-            case 3:
-                Menu_Clientes();
-                break;
-            case 9:
-                
-                break;
-            default:
-                Invalid();
-              
-                break;
+            case 1: break;
+            case 2: Menu_Stock(); break;
+            case 3: Menu_Clientes(); break;
+            case 9: break;
+            default: Invalid(); break;
          }
 
         } while (escolha != 9);
@@ -85,18 +80,10 @@ void Menu_Clientes() {
 
          switch (escolha)
          {
-             case 1:
-                Inserir_Cliente();
-                break;
-             case 2:
-                
-                break;
-             case 9:
-                Menu();
-                break;
-             default:
-                Invalid();
-                break;
+             case 1: Inserir_Cliente(); break;
+             case 2: break;
+             case 9: Menu(); break;
+             default: Invalid(); break;
          }
 
         } while (escolha != 9);
@@ -121,19 +108,10 @@ void Menu_Stock() {
 
          switch (escolha)
          {
-             case 1:
-                //Stock_Inserir();
-                break;
-             case 2:
-                 
-                break;
-             case 9:
-                Menu();
-                break;
-             default:
-                Invalid();
-                
-                break;
+             case 1: break;
+             case 2: break;
+             case 9: Menu(); break;
+             default: Invalid(); break;
          }
 
         } while (escolha != 9);
@@ -142,34 +120,38 @@ void Menu_Stock() {
 
 // CLIENTES
 #pragma region Clientes
-void Inserir_Clientes() {
-    FILE *ficheiro;
-    
-    char nome_ficheiro[100];
-    char nome[100] = "Cliente";
-    char Client_Name[100];
 
-    for (float i = 0; i < 5; i++)
+int Check_Clientes() {
+    FILE *fptr;
+    for (float i = 1; i < MaxQuantidade; i++)
     {
-        sprintf(nome_ficheiro, "%s%03.0f.txt", nome, i+1);
-        printf("\n%s", nome_ficheiro);
-      
-        ficheiro = fopen(nome_ficheiro, "w");
-        printf("Nome: ");
-        scanf("%s", Client_Name);
-
-        printf("Nome: %s\n", Client_Name);
-
-        fprintf(ficheiro, "Nome: %s\n", Client_Name);
-
-        fclose(ficheiro);
+        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
+        if ((fptr = fopen(nome_ficheiro,"r")) == NULL){
+            return i;
+        }
+        fclose(fptr);
     }
 }
 
-
 void Inserir_Cliente() {
    system("cls"); 
-   Inserir_Clientes();
+    FILE *ficheiro;
+    char Client_Name[100];
+    float num = Check_Clientes();
+    
+    printf("Insercao de um cliente\n\n");
+    printf("Nome do Cliente: ");
+    scanf("%s", Client_Name);
+
+    sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, num);
+    printf("\nO cliente foi guardado como: %s", nome_ficheiro);
+      
+    ficheiro = fopen(nome_ficheiro, "w");
+
+    //printf("Nome: %s\n", Client_Name);
+    fprintf(ficheiro, "Nome: %s\n", Client_Name);
+
+    fclose(ficheiro);
 
    printf("\nPressiona ENTER para continuar\n");
    getch();   
