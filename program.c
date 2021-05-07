@@ -147,6 +147,7 @@ void Inserir_Clientes() {
     
     char nome_ficheiro[100];
     char nome[100] = "Cliente";
+    char Client_Name[100];
 
     for (float i = 0; i < 5; i++)
     {
@@ -154,8 +155,13 @@ void Inserir_Clientes() {
         printf("\n%s", nome_ficheiro);
       
         ficheiro = fopen(nome_ficheiro, "w");
+        printf("Nome: ");
+        scanf("%s", Client_Name);
 
-        fprintf(ficheiro, "Roberto");  
+        printf("Nome: %s\n", Client_Name);
+
+        fprintf(ficheiro, "Nome: %s\n", Client_Name);
+
         fclose(ficheiro);
     }
 }

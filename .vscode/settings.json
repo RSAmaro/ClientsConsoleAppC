@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.c": "c",
-        "windows.h": "c"
+        "windows.h": "c",
+        "typeinfo": "c"
     }
 }
