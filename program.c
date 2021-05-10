@@ -98,7 +98,7 @@ void Menu_Clientes() {
 float Check_Clientes() {
     for (float i = 1; i < MaxQuantidade; i++)
     {
-        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
+        sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, i);
         if ((FIL = fopen(nome_ficheiro,"r")) == NULL){
             fclose(FIL);
             return i;
@@ -114,7 +114,7 @@ void Inserir_Cliente() {
     printf("Nome do Cliente: ");
     scanf("%s", Client_Name);
 
-    sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, num);
+    sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, num);
     printf("\nO cliente foi guardado como: %s", nome_ficheiro);
       
     FIL = fopen(nome_ficheiro, "w");
@@ -126,27 +126,18 @@ void Inserir_Cliente() {
     Confirm();
 }
 
-float Lista_Clientes() {
-    for (float i = MaxQuantidade; i > 0; i--)
-    {
-        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
-        if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
-            fclose(FIL);
-            return i;
-        }
-    }
-}
+
 void Listar_Clientes() {
     system("cls");
     char Linha[100];
     char *result;
     boolean found = 0;
 
-    float Quantity = Lista_Clientes();
+    //float Quantity = Lista_Clientes();
 
-    for (float i = 1; i <= Quantity; i++)
+    for (float i = 1; i <= MaxQuantidade; i++)
     {
-        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
+        sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, i);
         if ((FIL = fopen(nome_ficheiro,"r")) != NULL) {
             found = 1;
             int j = 1;
@@ -168,6 +159,10 @@ void Listar_Clientes() {
     Confirm();
     return;
 }
+
+
+
+
 
 #pragma endregion
 
@@ -201,4 +196,20 @@ void Menu_Stock() {
 
         } while (escolha != 9);
 }
+#pragma endregion
+
+
+
+#pragma region Obsolete
+/*
+float Lista_Clientes() {
+    for (float i = MaxQuantidade; i > 0; i--)
+    {
+        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
+        if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
+            fclose(FIL);
+            return i;
+        }
+    }
+}*/
 #pragma endregion
