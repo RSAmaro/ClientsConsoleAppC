@@ -13,7 +13,7 @@
 
 //Variaveis
 FILE *FIL;
-int MaxQuantidade = 99999999;
+int MaxQuantidade = 1000;
 char NomePrograma[50] = "Coutaro";
 char nome_ficheiro[100];
 
@@ -67,7 +67,7 @@ void Menu() {
 
 void Menu_Clientes() {
     do
-        {
+        {  
          system("cls");
          Lines();
          printf(YELLOW "\n%s" RESET " - " GREEN "Clientes\n\n" RESET, NomePrograma);
@@ -95,10 +95,6 @@ void Menu_Clientes() {
         } while (escolha != 9);
 }
 
-float test(){
-    
-}
-
 float Check_Clientes() {
     for (float i = 1; i < MaxQuantidade; i++)
     {
@@ -109,12 +105,11 @@ float Check_Clientes() {
         }
     }
 }
-
 void Inserir_Cliente() {
     system("cls");
     char Client_Name[100];
     float num = Check_Clientes();
-    
+
     printf("Insercao de um cliente\n\n");
     printf("Nome do Cliente: ");
     scanf("%s", Client_Name);
@@ -131,16 +126,27 @@ void Inserir_Cliente() {
     Confirm();
 }
 
+float Lista_Clientes() {
+    for (float i = MaxQuantidade; i > 0; i--)
+    {
+        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
+        if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
+            fclose(FIL);
+            return i;
+        }
+    }
+}
 void Listar_Clientes() {
     system("cls");
     char Linha[100];
     char *result;
     boolean found = 0;
 
-    for (float i = 1; i < MaxQuantidade; i++)
+    float num = Lista_Clientes();
+
+    for (float i = 1; i <= num; i++)
     {
         sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
-//ARRANJAR FIX!!
         if ((FIL = fopen(nome_ficheiro,"r")) != NULL) {
             found = 1;
             int j = 1;
@@ -153,16 +159,14 @@ void Listar_Clientes() {
             }
             printf("\n");
         }
-        else
-        {
-           if(!found)
-                printf(RED "Nao foi encontrado Clientes!" RESET);
-
-           fclose(FIL);
-           Confirm();
-           return;
-        }
+        fclose(FIL);
     }
+     if(!found)
+        printf(RED "Nao foi encontrado Clientes!" RESET);
+
+    fclose(FIL);
+    Confirm();
+    return;
 }
 
 #pragma endregion
