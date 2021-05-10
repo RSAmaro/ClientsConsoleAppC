@@ -142,9 +142,9 @@ void Listar_Clientes() {
     char *result;
     boolean found = 0;
 
-    float num = Lista_Clientes();
+    float Quantity = Lista_Clientes();
 
-    for (float i = 1; i <= num; i++)
+    for (float i = 1; i <= Quantity; i++)
     {
         sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
         if ((FIL = fopen(nome_ficheiro,"r")) != NULL) {
