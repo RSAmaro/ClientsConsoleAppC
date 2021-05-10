@@ -165,6 +165,9 @@ void Listar_Clientes() {
     }
 }
 
+void Editar_clientes(){
+    
+}
 #pragma endregion
 
 #pragma region Stocks
