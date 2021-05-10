@@ -21,6 +21,21 @@ char escolha_char[3];
 int escolha;
 
 char Cliente[100] = "Cliente";
+float Nr_Clientes;
+
+// Quantidades
+void Quantidade_Clientes() {
+    Nr_Clientes = 0;
+    for (float i = MaxQuantidade; i > 0; i--)
+        {
+            sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, i);
+            if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
+                fclose(FIL);
+                Nr_Clientes = i;
+                break;
+            }
+        }
+}
 
 //Respostas
 void Invalid() {printf(RED "\nEscolha Invalida!\n" RESET); Confirm(); }
@@ -35,20 +50,21 @@ void main() {
 // MENU PRINCIPAL
 void Menu() {
     do
-        {
+        {   
          system("cls");
          Lines();
          printf(YELLOW "\n%s\n\n" RESET, NomePrograma);
-         printf("1. Vendas\n");
-         printf("2. Stock\n");
-         printf("3. Clientes\n");
-         printf("4. Fornecedores\n");
+         printf("\x10 1. Vendas\n");
+         printf("\x10 2. Stock\n");
+         printf("\x10 3. Clientes\n");
+         printf("\x10 4. Fornecedores\n");
 
          printf(RED "\n9. Sair\n" RESET);
          Lines();
          printf(GREEN "\nEscolha: " RESET);
          scanf("%s",escolha_char);
          escolha = atoi(escolha_char);
+         getchar();
 
          switch (escolha)
          {
@@ -71,22 +87,22 @@ void Menu_Clientes() {
          system("cls");
          Lines();
          printf(YELLOW "\n%s" RESET " - " GREEN "Clientes\n\n" RESET, NomePrograma);
-         printf("1. Inserir\n");
-         printf("2. Listar\n");
-         printf("3. Editar\n");
-         printf("4. Eliminar\n");
+         printf("\x10 1. Inserir\n");
+         printf("\x10 2. Listar\n");
+         printf("\x10 3. Alterar\n");
 
          printf(RED "\n9. Voltar\n" RESET);
          Lines();
          printf(GREEN "\nEscolha: " RESET);
          scanf("%s",escolha_char);
          escolha = atoi(escolha_char);
+         getchar();
 
          switch (escolha)
          {
-             case 1: Inserir_Cliente(); break;
+             case 1: Inserir_Cliente(0); break;
              case 2: Listar_Clientes(); break;
-             case 3: break;
+             case 3: Alterar_Clientes(); break;
              case 4: break;
              case 9: Menu(); break;
              default: Invalid(); break;
@@ -105,14 +121,34 @@ float Check_Clientes() {
         }
     }
 }
-void Inserir_Cliente() {
+void Inserir_Cliente(float ID) {
     system("cls");
-    char Client_Name[100];
-    float num = Check_Clientes();
+    char name[100];
+    char morada[100];
+    
+    float num;
 
-    printf("Insercao de um cliente\n\n");
-    printf("Nome do Cliente: ");
-    scanf("%s", Client_Name);
+    if(ID == 0){
+        printf("Insercao de um cliente\n\n");
+        num = Check_Clientes();
+    }    
+    else{
+        printf("Editando Cliente #%03.0f\n\n", ID);
+        num = ID;
+    }
+    
+    printf(YELLOW "Senao introduzir um valor ira voltar para o menu anterior\n" RESET);
+    printf(GREEN "Nome do Cliente: " RESET);
+    fgets(name, 100, stdin);
+    name[strlen(name)-1]='\0';
+    if(name[0] == '\0')
+        return;
+
+    printf(GREEN "Morada do Cliente: " RESET);    
+    fgets(morada, 100, stdin);
+    morada[strlen(morada)-1]='\0';
+    if(morada[0] == '\0')
+        return;
 
     sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, num);
     printf("\nO cliente foi guardado como: %s", nome_ficheiro);
@@ -120,12 +156,11 @@ void Inserir_Cliente() {
     FIL = fopen(nome_ficheiro, "w");
 
     //printf("Nome: %s\n", Client_Name);
-    fprintf(FIL, "ID:%.0f\nNome:%s\n", num, Client_Name);
+    fprintf(FIL, "ID:%.0f\nNome:%s\nMorada:%s\n", num, name, morada);
 
     fclose(FIL);
     Confirm();
 }
-
 
 void Listar_Clientes() {
     system("cls");
@@ -133,36 +168,70 @@ void Listar_Clientes() {
     char *result;
     boolean found = 0;
 
-    //float Quantity = Lista_Clientes();
+    Quantidade_Clientes();
 
-    for (float i = 1; i <= MaxQuantidade; i++)
+    for (float i = 1; i <= Nr_Clientes; i++)
     {
         sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, i);
         if ((FIL = fopen(nome_ficheiro,"r")) != NULL) {
             found = 1;
-            int j = 1;
             while (!feof(FIL))
             {
                 result = fgets(Linha, 100, FIL);
                     if(result)
                         printf(GREEN "%s" RESET, Linha);
-                j++;
             }
             printf("\n");
         }
         fclose(FIL);
+
+        if ((int)i % 10 == 0)
+            Confirm();
     }
      if(!found)
         printf(RED "Nao foi encontrado Clientes!" RESET);
 
-    fclose(FIL);
     Confirm();
     return;
 }
 
+void Remover_Clientes(float ID) {
+    system("cls");
+    sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, ID);
+    remove(nome_ficheiro);
+    printf("Apagado com Sucesso!");
+    Confirm();
+}
 
+void Alterar_Clientes() {
+    float ID;
+    Listar_Clientes();
 
+    printf(YELLOW "Escolha o ID do utilizador que pretende alterar: " RESET);
+    scanf("%f",&ID);
+    getchar();
 
+    sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, ID);
+
+    if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
+        printf("\n\x10 1. Editar");
+        printf("\n\x10 2. Apagar");
+        printf(RED "\n\x10 3. Cancelar" RESET);
+        printf(GREEN "\nEscolha: " RESET);
+        scanf("%s",escolha_char);
+        escolha = atoi(escolha_char);
+        getchar();
+        fclose(FIL);
+        
+         switch (escolha)
+         {
+             case 1: Inserir_Cliente(ID); break;
+             case 2: Remover_Clientes(ID); break;
+             default: return;
+         }        
+    }
+
+}
 
 #pragma endregion
 
@@ -175,14 +244,14 @@ void Menu_Stock() {
          printf(YELLOW "\n%s" RESET " - " GREEN "Stock\n\n" RESET, NomePrograma);
          printf("1. Inserir\n");
          printf("2. Listar\n");
-         printf("3. Editar\n");
-         printf("4. Eliminar\n");
+         printf("3. Alterar\n");
 
          printf(RED "\n9. Voltar\n" RESET);
          Lines();
          printf(GREEN "\nEscolha: " RESET);
          scanf("%s",escolha_char);
          escolha = atoi(escolha_char);
+         getchar();
 
          switch (escolha)
          {
@@ -201,15 +270,6 @@ void Menu_Stock() {
 
 
 #pragma region Obsolete
-/*
-float Lista_Clientes() {
-    for (float i = MaxQuantidade; i > 0; i--)
-    {
-        sprintf(nome_ficheiro, "%s%03.0f.txt", Cliente, i);
-        if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
-            fclose(FIL);
-            return i;
-        }
-    }
-}*/
+
+
 #pragma endregion
