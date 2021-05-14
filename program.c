@@ -23,6 +23,10 @@ int escolha;
 char Cliente[100] = "Cliente";
 float Nr_Clientes;
 
+char Stock[100] = "Produto";
+float Nr_Produtos;
+
+#pragma region Quantidades
 // Quantidades
 void Quantidade_Clientes() {
     Nr_Clientes = 0;
@@ -37,9 +41,23 @@ void Quantidade_Clientes() {
         }
 }
 
+void Quantidade_Produtos() {
+    Nr_Produtos = 0;
+    for (float i = MaxQuantidade; i > 0; i--)
+        {
+            sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, i);
+            if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
+                fclose(FIL);
+                Nr_Produtos = i;
+                break;
+            }
+        }
+}
+#pragma endregion
+
 //Respostas
 void Invalid() {printf(RED "\nEscolha Invalida!\n" RESET); Confirm(); }
-void Lines() { printf("====================");}
+void Lines() { printf(CYAN "====================" RESET);}
 void Confirm() {printf("\nPressiona ENTER para continuar\n"); getch(); }
 
 //Program
@@ -103,7 +121,7 @@ void Menu_Clientes() {
              case 1: Inserir_Cliente(0); break;
              case 2: Listar_Clientes(); break;
              case 3: Alterar_Clientes(); break;
-             case 4: break;
+
              case 9: Menu(); break;
              default: Invalid(); break;
          }
@@ -214,6 +232,7 @@ void Alterar_Clientes() {
     sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, ID);
 
     if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
+        Lines();
         printf("\n\x10 1. Editar");
         printf("\n\x10 2. Apagar");
         printf(RED "\n\x10 3. Cancelar" RESET);
@@ -255,8 +274,8 @@ void Menu_Stock() {
 
          switch (escolha)
          {
-             case 1: break;
-             case 2: break;
+             case 1: Inserir_Stock(0); break;
+             case 2: Listar_Stock(); break;
              case 3: break;
              case 4: break;
              case 9: Menu(); break;
@@ -265,6 +284,96 @@ void Menu_Stock() {
 
         } while (escolha != 9);
 }
+
+float Check_Stock() {
+    for (float i = 1; i < MaxQuantidade; i++)
+    {
+        sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, i);
+        if ((FIL = fopen(nome_ficheiro,"r")) == NULL){
+            fclose(FIL);
+            return i;
+        }
+    }
+}
+
+void Inserir_Stock(float ID) {
+    system("cls");
+    char produto[100];
+    int quantidade = 0;
+    float preco;
+    float num;
+
+    if(ID == 0){
+        printf("Insercao de um Produto\n\n");
+        num = Check_Stock();
+    }    
+    else{
+        printf("Editando Produto #%03.0f\n\n", ID);
+        num = ID;
+    }
+    
+    printf(YELLOW "Senao introduzir um valor ira voltar para o menu anterior\n" RESET);
+    printf(GREEN "Nome do Produto: " RESET);
+    fgets(produto, 100, stdin);
+    produto[strlen(produto)-1]='\0';
+    if(produto[0] == '\0')
+    return;
+
+    printf(GREEN "Quantidade: " RESET);    
+    scanf("%d", &quantidade);
+    if(!(int)quantidade)
+    return;
+
+    printf(GREEN "Preco do Produto: " RESET);    
+    scanf("%f", &preco);
+    if(!(float)preco)
+    return;
+
+    sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, num);
+    printf("\nO produto foi guardado como: %s", nome_ficheiro);
+      
+    FIL = fopen(nome_ficheiro, "w");
+
+    //printf("Nome: %s\n", Client_Name);
+    fprintf(FIL, "ID:%.0f\nProduto:%s\nQuantidade:%d\nPreco:%.2f$\n", num, produto, quantidade, preco);
+
+    fclose(FIL);
+    Confirm();
+}
+
+void Listar_Stock() {
+    system("cls");
+    char Linha[100];
+    char *result;
+    boolean found = 0;
+
+    Quantidade_Produtos();
+
+    for (float i = 1; i <= Nr_Produtos; i++)
+    {
+        sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, i);
+        if ((FIL = fopen(nome_ficheiro,"r")) != NULL) {
+            found = 1;
+            while (!feof(FIL))
+            {
+                result = fgets(Linha, 100, FIL);
+                    if(result)
+                        printf(GREEN "%s" RESET, Linha);
+            }
+            printf("\n");
+        }
+        fclose(FIL);
+
+        if ((int)i % 10 == 0)
+            Confirm();
+    }
+     if(!found)
+        printf(RED "Nao ha produtos!" RESET);
+
+    Confirm();
+    return;
+}
+
 #pragma endregion
 
 
