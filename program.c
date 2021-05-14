@@ -118,7 +118,7 @@ void Menu_Clientes() {
 
          switch (escolha)
          {
-             case 1: Inserir_Cliente(0); break;
+             case 1: Inserir_Cliente((float)0); break;
              case 2: Listar_Clientes(); break;
              case 3: Alterar_Clientes(); break;
 
@@ -274,7 +274,7 @@ void Menu_Stock() {
 
          switch (escolha)
          {
-             case 1: Inserir_Stock(0); break;
+             case 1: Inserir_Stock((float)0); break;
              case 2: Listar_Stock(); break;
              case 3: break;
              case 4: break;
