@@ -146,7 +146,7 @@ void Inserir_Cliente(float ID) {
     
     float num;
 
-    if(ID == 0){
+    if((int)ID == 0){
         printf("Insercao de um cliente\n\n");
         num = Check_Clientes();
     }    
@@ -303,7 +303,7 @@ void Inserir_Stock(float ID) {
     float preco;
     float num;
 
-    if(ID == 0){
+    if((int)ID == 0){
         printf("Insercao de um Produto\n\n");
         num = Check_Stock();
     }    
