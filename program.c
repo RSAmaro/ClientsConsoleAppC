@@ -13,6 +13,7 @@
 
 //Variaveis
 FILE *FIL;
+
 int MaxQuantidade = 1000;
 char NomePrograma[50] = "Coutaro";
 char nome_ficheiro[100];
@@ -25,6 +26,9 @@ float Nr_Clientes;
 
 char Stock[100] = "Produto";
 float Nr_Produtos;
+
+char Venda[100] = "Venda";
+float Nr_Vendas;
 
 #pragma region Quantidades
 // Quantidades
@@ -62,6 +66,7 @@ void Confirm() {printf("\nPressiona ENTER para continuar\n"); getch(); }
 
 //Program
 void main() {
+    //teste();
     Menu();
 }
 
@@ -86,7 +91,7 @@ void Menu() {
 
          switch (escolha)
          {
-            case 1: break;
+            case 1: Menu_Vendas(); break;
             case 2: Menu_Stock(); break;
             case 3: Menu_Clientes(); break;
             case 9: break;
@@ -159,7 +164,7 @@ void Inserir_Cliente(float ID) {
     printf(GREEN "Nome do Cliente: " RESET);
     fgets(name, 100, stdin);
     name[strlen(name)-1]='\0';
-    if(name[0] == '\0')
+    if(name[0] == '\0' && strstr(name, "a") != NULL)
         return;
 
     printf(GREEN "Morada do Cliente: " RESET);    
@@ -206,9 +211,12 @@ void Listar_Clientes() {
         if ((int)i % 10 == 0)
             Confirm();
     }
-     if(!found)
+     if(!found){
         printf(RED "Nao foi encontrado Clientes!" RESET);
-
+        Confirm();
+        return Menu_Clientes();
+    }
+     
     Confirm();
     return;
 }
@@ -233,9 +241,9 @@ void Alterar_Clientes() {
 
     if ((FIL = fopen(nome_ficheiro,"r")) != NULL){
         Lines();
-        printf("\n\x10 1. Editar");
-        printf("\n\x10 2. Apagar");
-        printf(RED "\n\x10 3. Cancelar" RESET);
+        printf("\x10 1. Editar\n");
+        printf("\x10 2. Apagar\n");
+        printf(RED "\x10 3. Cancelar" RESET);
         printf(GREEN "\nEscolha: " RESET);
         scanf("%s",escolha_char);
         escolha = atoi(escolha_char);
@@ -261,9 +269,9 @@ void Menu_Stock() {
          system("cls");
          Lines();
          printf(YELLOW "\n%s" RESET " - " GREEN "Stock\n\n" RESET, NomePrograma);
-         printf("1. Inserir\n");
-         printf("2. Listar\n");
-         printf("3. Alterar\n");
+         printf("\x10 1. Inserir\n");
+         printf("\x10 2. Listar\n");
+         printf("\x10 3. Alterar\n");
 
          printf(RED "\n9. Voltar\n" RESET);
          Lines();
@@ -367,8 +375,11 @@ void Listar_Stock() {
         if ((int)i % 10 == 0)
             Confirm();
     }
-     if(!found)
+     if(!found){
         printf(RED "Nao ha produtos!" RESET);
+        Confirm();
+        return Menu_Stock();
+    }
 
     Confirm();
     return;
@@ -376,9 +387,127 @@ void Listar_Stock() {
 
 #pragma endregion
 
+#pragma region Vendas
 
+void Menu_Vendas() {
+    do
+        {
+         system("cls");
+         Lines();
+         printf(YELLOW "\n%s" RESET " - " GREEN "Vendas\n\n" RESET, NomePrograma);
+         printf("\x10 1. Inserir\n");
+         printf("\x10 2. Listar\n");
+         printf("\x10 3. Apagar\n");
+
+         printf(RED "\n9. Voltar\n" RESET);
+         Lines();
+         printf(GREEN "\nEscolha: " RESET);
+         scanf("%s",escolha_char);
+         escolha = atoi(escolha_char);
+         getchar();
+
+         switch (escolha)
+         {
+             case 1: Inserir_Vendas((float)0); break;
+             case 2: Listar_Stock(); break;
+             case 3: break;
+             case 4: break;
+             case 9: Menu(); break;
+             default: Invalid(); break;
+         }
+
+        } while (escolha != 9);
+}
+
+float Check_Vendas() {
+    for (float i = 1; i < MaxQuantidade; i++)
+    {
+        sprintf(nome_ficheiro, "Vendas/%s%03.0f.txt", Venda, i);
+        if ((FIL = fopen(nome_ficheiro,"r")) == NULL){
+            fclose(FIL);
+            return i;
+        }
+    }
+}
+
+void Inserir_Vendas() {
+    system("cls");  
+    char venda[100];
+    int quantidade = 0;
+    float ID;
+    float num;
+
+    printf("Insercao de uma Venda\n\n");
+        
+    printf(YELLOW "Senao introduzir um valor ira voltar para o menu anterior\n" RESET);
+    Confirm();
+
+    Listar_Clientes();
+    printf(GREEN "Coloque o ID do cliente que comprou: " RESET);
+    scanf("%f",&ID);
+    getchar();
+
+    sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, ID);
+
+    if ((FIL = fopen(nome_ficheiro, "r")) == NULL){
+        Invalid();
+        return Menu_Vendas();
+    }
+
+    Listar_Stock();
+    printf(GREEN "Coloque o ID do produto que comprou: " RESET);
+    scanf("%f",&ID);
+    getchar();
+
+    sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, ID);
+
+    if ((FIL = fopen(nome_ficheiro, "r")) == NULL){
+        Invalid();
+        return Menu_Vendas();
+    }
+
+    num = Check_Vendas();
+
+    fclose(FIL);
+    Confirm();
+}
+
+#pragma endregion
 
 #pragma region Obsolete
+
+void teste(){
+int lineNumber = 1;
+
+static const char filename[] = "Clientes/Cliente001.txt";
+FILE *file = fopen(filename, "r");
+int count = 0;
+if ( file != NULL )
+{
+    char line[256]; /* or other suitable maximum line size */
+    while (fgets(line, sizeof line, file) != NULL) /* read a line */
+    {
+        if (count == lineNumber)
+        {
+            printf(line);
+            Confirm();
+            return;
+            //use line or in a function return it
+            //in case of a return first close the file with "fclose(file);"
+        }
+        else
+        {
+            count++;
+        }
+    }
+    fclose(file);
+}
+else
+{
+    //file doesn't exist
+}
+Confirm();
+}
 
 
 #pragma endregion
