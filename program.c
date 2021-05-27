@@ -232,7 +232,7 @@ void Inserir_Cliente(float ID)
 
     printf(GREEN "NIF do Cliente: " RESET);
     scanf("%d", &nif);
-    if (!(int)nif || (int)nif == NULL)
+    if (!(int)nif || (int)nif == NULL || (int)nif < 0)
         return;
 
     sprintf(nome_ficheiro, "Clientes/%s%03.0f.txt", Cliente, num);
@@ -431,12 +431,12 @@ void Inserir_Stock(float ID)
 
     printf(GREEN "Quantidade: " RESET);
     scanf("%d", &quantidade);
-    if (!(int)quantidade || (int)quantidade == NULL)
+    if (!(int)quantidade || (int)quantidade == NULL || (int)quantidade < 0)
         return;
 
     printf(GREEN "Preco do Produto: " RESET);
     scanf("%f", &preco);
-    if (!(float)preco || (int)preco == NULL)
+    if (!(float)preco || (int)preco == NULL || (float)preco < 0)
         return;
 
     sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, num);
@@ -670,17 +670,19 @@ void Listar_Vendas()
                 }
             }
             printf("\n");
+            Lines();
+            printf("\n");
         }
         fclose(FIL);
 
-        if ((int)i % 10 == 0)
+        if ((int)i % 5 == 0)
             Confirm();
     }
     if (!found)
     {
-        printf(RED "Nao ha produtos!" RESET);
+        printf(RED "Nao ha vendas!" RESET);
         Confirm();
-        return Menu_Stock();
+        return Menu_Vendas();
     }
 
     Confirm();
