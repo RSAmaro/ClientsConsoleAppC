@@ -791,9 +791,6 @@ void Reduzir_Stock(int quantia, int line_nr) {
         fclose(fptr2);
 
         ChangeFileNames();
-
-        printf(" Replacement did successfully..!! \n");
-        return 0;
 }
 
 void ChangeFileNames(){
