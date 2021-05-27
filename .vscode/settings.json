@@ -2,6 +2,7 @@
     "files.associations": {
         "*.c": "c",
         "typeinfo": "c",
-        "stat.h": "c"
+        "stat.h": "c",
+        "windows.h": "c"
     }
 }
