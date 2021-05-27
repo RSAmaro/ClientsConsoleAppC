@@ -90,8 +90,20 @@ void Confirm() {
     getch();
 }
 
+void make_directory(const char* name) {
+   #ifdef __linux__
+       mkdir(name, 777); 
+   #else
+       _mkdir(name);
+   #endif
+}
+
 //Program
 void main() {
+    make_directory("Clientes");
+    make_directory("Fornecedores");
+    make_directory("Vendas");
+    make_directory("Stock");
     Menu();
 }
 
