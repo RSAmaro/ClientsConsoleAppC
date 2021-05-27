@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <windows.h>
 #include <string.h>
+#include <conio.h>
+#include <stdlib.h>
 
 // Cores do programa
 #define RED "\x1b[31m"
@@ -11,6 +13,8 @@
 #define MAGENTA "\x1b[35m"
 #define CYAN "\x1b[36m"
 #define RESET "\x1b[0m"
+
+#define MAX 256
 
 //Variaveis
 FILE *FIL;
@@ -376,8 +380,6 @@ void Menu_Stock()
             break;
         case 3:
             break;
-        case 4:
-            break;
         case 9:
             Menu();
             break;
@@ -564,9 +566,10 @@ void Inserir_Vendas()
 {
     system("cls");
     char venda[100];
-    int quantidade = 0;
+
     float ID;
     float num;
+    
     char Texto_Cliente[1000] = {};
     char Texto_Stock[1000] = {};
 
@@ -598,18 +601,36 @@ void Inserir_Vendas()
     Confirm();
 
     Listar_Stock();
-    printf(GREEN "Coloque o ID do produto que comprou: " RESET);
-    scanf("%f", &ID);
-    getchar();
+    int TemStock = 0;
+    int quantia = 0;
+    printf(GREEN "Coloque o ID do produto que comprou\n" RESET);
 
-    // Ver Stock
-    sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, ID);
+    while(!TemStock) {
+        printf(YELLOW "ID: " RESET);
+        scanf("%f", &ID);
+        getchar();
 
-    if ((FIL = fopen(nome_ficheiro, "r")) == NULL) {
-        Invalid();
-        return Menu_Vendas();
+        sprintf(nome_ficheiro, "Stock/%s%03.0f.txt", Stock, ID);
+
+        if ((FIL = fopen(nome_ficheiro, "r")) == NULL) {
+            Invalid();
+            return Menu_Vendas();
+        }
+        fclose(FIL);
+        
+        // Ver se tem Stock?
+        Info_Stock(2);
+        quantia = atoi(info);
+        if(quantia > 0)
+            TemStock = 1;
+        else
+            printf(RED "Esse produto nao tem Stock!\n" RESET);
     }
     
+    quantia--;
+    printf("%d", quantia); 
+    Reduzir_Stock(quantia, 2);
+
     Info_Stock(1);
     strcat(Texto_Stock, info);
     Info_Stock(3);
@@ -701,7 +722,7 @@ void Info_Cliente(int line_nr)
     int count = 0;
     if (file != NULL)
     {
-        char line[256];
+        char line[MAX];
         while (fgets(line, sizeof line, file) != NULL)
         {
             if (count == line_nr) {
@@ -723,7 +744,7 @@ void Info_Stock(int line_nr)
     int count = 0;
     if (file != NULL)
     {
-        char line[256];
+        char line[MAX];
         while (fgets(line, sizeof line, file) != NULL)
         {
             if (count == line_nr) {
@@ -737,6 +758,65 @@ void Info_Stock(int line_nr)
     }
 }
 
+void Reduzir_Stock(int quantia, int line_nr) {
+        FILE *fptr1, *fptr2;
+        int lno, linectr = 0;
+        char str[MAX],fname[MAX];        
+        char newln[MAX], temp[] = "temp.txt";
+		
+        strcpy(fname, nome_ficheiro);
+        fptr1 = fopen(fname, "r");
+        fptr2 = fopen(temp, "w");
+        /* get the new line from the user */
+        sprintf(newln, "%d", quantia);
+        /* get the line number to delete the specific line */
+        lno = line_nr;
+        lno++;
+         // copy all contents to the temporary file other except specific line
+        while (!feof(fptr1)) 
+        {
+            strcpy(str, "\0");
+            fgets(str, MAX, fptr1);
+            if (!feof(fptr1)) 
+            {
+                linectr++;
+                if (linectr != lno) {
+                    fprintf(fptr2, "%s", str);
+                } else {
+                    fprintf(fptr2, "%s\n", newln);
+                }
+            }
+        }
+        fclose(fptr1);
+        fclose(fptr2);
+
+        ChangeFileNames();
+
+        printf(" Replacement did successfully..!! \n");
+        return 0;
+}
+
+void ChangeFileNames(){
+   FILE *fp1, *fp2;
+   char ch;
+ 
+   fp1 = fopen("temp.txt", "r");
+   fp2 = fopen(nome_ficheiro, "w");
+ 
+   while (1) {
+      ch = fgetc(fp1);
+ 
+      if (ch == EOF)
+         break;
+      else
+         putc(ch, fp2);
+   }
+ 
+   printf("File copied Successfully!");
+   fclose(fp1);
+   fclose(fp2);
+}
+
 void trimTrailing(char * str)
 {
     int index, i;
@@ -746,11 +826,9 @@ void trimTrailing(char * str)
 
     /* Find last index of non-white space character */
     i = 0;
-    while(str[i] != '\0')
-    {
-        if(str[i] != ' ' && str[i] != '\t' && str[i] != '\n') {
+    while(str[i] != '\0') {
+        if(str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
             index= i;
-        }
 
         i++;
     }
