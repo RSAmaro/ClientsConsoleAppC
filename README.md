@@ -1,2 +1,1 @@
-# Coutaro
-ola
+# Simple C Client Console Application
