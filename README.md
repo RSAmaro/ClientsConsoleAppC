@@ -1,1 +1,1 @@
-# Simple C Client Console Application
+# Simple C Console Application - Store
